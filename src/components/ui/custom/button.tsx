@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'destructive';
 }
 
 export const CustomButton = forwardRef<HTMLButtonElement, ButtonProps>(

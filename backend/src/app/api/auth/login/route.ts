@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { storage } from '@/lib/storage';
 import { generateToken } from '@/lib/auth';
+import { corsMiddleware, handleOptions } from '@/lib/cors';
 
-export async function POST(request: Request) {
+async function handler(request: NextRequest) {
   try {
     const { email, password } = await request.json();
     const users = await storage.getUsers();
@@ -27,4 +29,12 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   }
+}
+
+export async function POST(request: NextRequest) {
+  return corsMiddleware(request, handler);
+}
+
+export async function OPTIONS() {
+  return handleOptions();
 }

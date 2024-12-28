@@ -4,13 +4,16 @@ import { CustomButton } from '@/components/ui/custom/button';
 import { ImageUpload } from './ImageUpload';
 import type { Movie } from '@/types/movie';
 
+const DEFAULT_MOVIE_POSTER = 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=800&auto=format&fit=crop&q=60';
+
 interface MovieFormProps {
   movie?: Movie;
   onSubmit: (movie: Omit<Movie, 'id'>) => void;
+  onDelete?: () => void;
   onCancel: () => void;
 }
 
-export function MovieForm({ movie, onSubmit, onCancel }: MovieFormProps) {
+export function MovieForm({ movie, onSubmit, onDelete, onCancel }: MovieFormProps) {
   const [title, setTitle] = useState(movie?.title || '');
   const [publishingYear, setPublishingYear] = useState(
     movie?.publishingYear || new Date().getFullYear()
@@ -19,7 +22,11 @@ export function MovieForm({ movie, onSubmit, onCancel }: MovieFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ title, publishingYear, poster });
+    onSubmit({ 
+      title, 
+      publishingYear, 
+      poster: poster || DEFAULT_MOVIE_POSTER // Use default poster if none provided
+    });
   };
 
   return (
@@ -53,6 +60,16 @@ export function MovieForm({ movie, onSubmit, onCancel }: MovieFormProps) {
               <CustomButton type="submit">
                 {movie ? 'Update' : 'Submit'}
               </CustomButton>
+              {onDelete && (
+                <CustomButton 
+                  type="button" 
+                  variant="destructive"
+                  className="ml-auto !bg-red-500 hover:!bg-red-600"
+                  onClick={onDelete}
+                >
+                  Delete
+                </CustomButton>
+              )}
             </div>
           </div>
         </div>

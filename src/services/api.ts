@@ -1,10 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+import { type ApiError } from '@/types/api';
 
-export class ApiError extends Error {
-  constructor(public status: number, message: string) {
-    super(message);
-  }
-}
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 async function fetchApi(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('token');
@@ -20,10 +16,11 @@ async function fetchApi(endpoint: string, options: RequestInit = {}) {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
-    throw new ApiError(response.status, error.message || 'Something went wrong');
+    throw new Error(error.message || 'Something went wrong');
   }
 
-  return response.json();
+  // Return null for 204 responses, otherwise parse JSON
+  return response.status === 204 ? null : response.json();
 }
 
 export const api = {

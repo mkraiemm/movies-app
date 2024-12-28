@@ -7,9 +7,13 @@ import type { Movie } from '@/types/movie';
 export function CreateMovie() {
   const navigate = useNavigate();
 
-  const handleSubmit = (movieData: Omit<Movie, 'id'>) => {
-    moviesService.create(movieData);
-    navigate('/');
+  const handleSubmit = async (movieData: Omit<Movie, 'id'>) => {
+    try {
+      await moviesService.create(movieData);
+      navigate('/', { replace: true }); // Use replace to force a fresh load of the movies list
+    } catch (error) {
+      console.error('Failed to create movie:', error);
+    }
   };
 
   return (
