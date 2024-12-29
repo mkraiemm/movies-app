@@ -17,11 +17,13 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 .DS_Store
+.bolt
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
 
 # Ignore Next.js build files in backend
 /backend/.next/

@@ -3,6 +3,11 @@
 
 A modern web application for managing your personal movie collection. Built with React, TypeScript, and Next.js, featuring a beautiful UI with Tailwind CSS and secure authentication.
 
+## 🌐 Live Demo
+- Frontend: http://13.51.168.24
+- Backend API: http://13.51.168.24:4000
+- GitHub Repository: [github.com/mkraiem/movies-app](https://github.com/mkraiem/movies-app)
+
 ## Features
 - 🎬 Movie management (Create, Read, Update, Delete)
 - 🔐 Secure authentication
@@ -38,7 +43,7 @@ npm install
 npm run dev
 ```
 
-The frontend development server will start on `http://localhost:5173`
+The frontend development server will start on `http://localhost:4000`
 
 ## API Documentation
 
@@ -230,4 +235,4 @@ Error response body:
 - All endpoints except `/auth/login` require authentication
 - HTTPS is required for all API calls
 - Tokens expire after 7 days
-- CORS is enabled for `http://localhost:5173`
+- CORS is enabled for `http://16.16.184.152`
