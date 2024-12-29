@@ -1,9 +1,51 @@
-# Movies API Documentation
+# Movies App
+### Created by mkraiem
 
-## Base URL
+A modern web application for managing your personal movie collection. Built with React, TypeScript, and Next.js, featuring a beautiful UI with Tailwind CSS and secure authentication.
+
+## Features
+- 🎬 Movie management (Create, Read, Update, Delete)
+- 🔐 Secure authentication
+- 🖼️ Image upload for movie posters
+- 📱 Responsive design
+- 🎨 Modern UI with dark theme
+
+## Getting Started
+
+### Backend Setup
+```bash
+# Navigate to backend directory
+cd backend
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run start
+```
+
+The backend server will start on `http://localhost:3000`
+
+### Frontend Setup
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+The frontend development server will start on `http://localhost:5173`
+
+## API Documentation
+
+### Base URL
 ```
 http://localhost:3000/api
-```
+
 
 ## Authentication
 The API uses JWT (JSON Web Token) for authentication. Include the token in the Authorization header:
