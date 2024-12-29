@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const ALLOWED_ORIGIN = 'http://localhost:5173';
+const ALLOWED_ORIGIN = 'http://localhost:3000';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
