@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CustomInput } from '@/components/ui/custom/input';
 import { CustomButton } from '@/components/ui/custom/button';
+import { YearPicker } from '@/components/ui/custom/year-picker';
 import { ImageUpload } from './ImageUpload';
 import type { Movie } from '@/types/movie';
 
@@ -37,12 +38,10 @@ export function MovieForm({ movie, onSubmit, onDelete, onCancel }: MovieFormProp
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-          {/* Desktop: Image on left, Mobile: Image after inputs */}
           <div className="lg:order-1 order-2">
             <ImageUpload value={poster} onChange={setPoster} />
           </div>
           
-          {/* Desktop: Inputs and buttons on right, Mobile: Inputs first */}
           <div className="space-y-6 lg:order-2 order-1">
             <CustomInput
               placeholder="Title"
@@ -51,16 +50,13 @@ export function MovieForm({ movie, onSubmit, onDelete, onCancel }: MovieFormProp
               required
               className="w-full bg-[#15374c] border-0"
             />
-            <CustomInput
-              type="number"
-              placeholder="Publishing year"
+            <YearPicker
               value={publishingYear}
-              onChange={(e) => setPublishingYear(Number(e.target.value))}
+              onChange={setPublishingYear}
               required
               className="w-full bg-[#15374c] border-0"
             />
             
-            {/* Desktop: Horizontal button layout */}
             <div className="hidden lg:flex gap-4 pt-4">
               <CustomButton 
                 type="button" 
@@ -90,7 +86,6 @@ export function MovieForm({ movie, onSubmit, onDelete, onCancel }: MovieFormProp
           </div>
         </div>
 
-        {/* Mobile: Vertical button layout */}
         <div className="flex flex-col gap-3 lg:hidden">
           <div className="grid grid-cols-2 gap-3">
             <CustomButton 
