@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Pagination } from '@/components/layout/Pagination';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { CustomButton } from '@/components/ui/custom/button';
+import { LoadingSpinner } from '@/components/ui/custom/loading-spinner';
 import { moviesService } from '@/services/movies';
 import { useAuth } from '@/services/auth';
 import type { Movie } from '@/types/movie';
@@ -44,9 +45,8 @@ export function Movies() {
   const handleDelete = async (id: string) => {
     try {
       await moviesService.delete(id);
-      await fetchMovies(); // Refresh the list after deletion
+      await fetchMovies();
       
-      // Adjust current page if necessary
       const totalPages = Math.ceil((movies.length - 1) / MOVIES_PER_PAGE);
       if (currentPage > totalPages) {
         setCurrentPage(Math.max(1, totalPages));
@@ -61,24 +61,17 @@ export function Movies() {
     navigate('/login');
   };
 
-  if (loading) {
-    return (
-      <PageLayout>
-        <div className="container mx-auto px-6">
-          <Header onLogout={handleLogout} onAdd={handleAdd} />
-          <div className="flex items-center justify-center min-h-[calc(100vh-100px)]">
-            <p className="text-white">Loading...</p>
+  return (
+    <PageLayout>
+      <div className="container mx-auto px-6">
+        <Header onLogout={handleLogout} onAdd={handleAdd} />
+        
+        {loading ? (
+          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
+            <LoadingSpinner className="w-8 h-8 mb-4" />
+            <p className="text-white/80">Loading movies...</p>
           </div>
-        </div>
-      </PageLayout>
-    );
-  }
-
-  if (movies.length === 0) {
-    return (
-      <PageLayout>
-        <div className="container mx-auto px-6">
-          <Header onLogout={handleLogout} onAdd={handleAdd} />
+        ) : movies.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
             <h1 className="text-5xl font-bold text-white mb-16">Your movie list is empty</h1>
             <CustomButton 
@@ -88,33 +81,25 @@ export function Movies() {
               Add a new movie
             </CustomButton>
           </div>
-        </div>
-      </PageLayout>
-    );
-  }
-
-  return (
-    <PageLayout>
-      <div className="container mx-auto px-6">
-        <Header onLogout={handleLogout} onAdd={handleAdd} />
-        
-        <main className="py-8">
-          <MovieGrid
-            movies={movies.slice(
-              (currentPage - 1) * MOVIES_PER_PAGE,
-              currentPage * MOVIES_PER_PAGE
-            )}
-            onAdd={handleAdd}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-          
-          <Pagination
-            currentPage={currentPage}
-            totalPages={Math.max(1, Math.ceil(movies.length / MOVIES_PER_PAGE))}
-            onPageChange={setCurrentPage}
-          />
-        </main>
+        ) : (
+          <main className="py-8">
+            <MovieGrid
+              movies={movies.slice(
+                (currentPage - 1) * MOVIES_PER_PAGE,
+                currentPage * MOVIES_PER_PAGE
+              )}
+              onAdd={handleAdd}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+            
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.max(1, Math.ceil(movies.length / MOVIES_PER_PAGE))}
+              onPageChange={setCurrentPage}
+            />
+          </main>
+        )}
       </div>
     </PageLayout>
   );
