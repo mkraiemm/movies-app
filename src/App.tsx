@@ -8,7 +8,17 @@ import { useAuth } from '@/services/auth';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  return user ? <>{children}</> : <Navigate to="/login" />;
+  
+  if (!user) {
+    // Save the current location to redirect back after login
+    const currentPath = window.location.pathname;
+    if (currentPath !== '/login') {
+      sessionStorage.setItem('redirectPath', currentPath);
+    }
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <>{children}</>;
 }
 
 function App() {

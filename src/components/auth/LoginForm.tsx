@@ -9,6 +9,7 @@ import { useAuth } from '@/services/auth';
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -18,9 +19,9 @@ export function LoginForm() {
     setError('');
     
     try {
-      const success = await login(email, password);
+      const success = await login(email, password, remember);
       if (success) {
-        navigate('/');
+        navigate('/', { replace: true });
       } else {
         setError('Invalid email or password');
       }
@@ -60,9 +61,16 @@ export function LoginForm() {
           <div className="flex items-center space-x-2">
             <Checkbox 
               id="remember" 
+              checked={remember}
+              onCheckedChange={(checked) => setRemember(checked as boolean)}
               className="border-gray-400 data-[state=checked]:bg-[#2ecc71] data-[state=checked]:border-[#2ecc71]" 
             />
-            <Label htmlFor="remember" className="text-gray-400">Remember me</Label>
+            <Label 
+              htmlFor="remember" 
+              className="text-gray-400 cursor-pointer select-none"
+            >
+              Remember me
+            </Label>
           </div>
           <CustomButton type="submit" className="w-full h-14">
             Login
