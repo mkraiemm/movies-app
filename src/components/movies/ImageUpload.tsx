@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload } from 'lucide-react';
 import { storageService } from '@/services/storage';
@@ -9,17 +9,44 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ value, onChange }: ImageUploadProps) {
+  const [preview, setPreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadImage() {
+      if (value) {
+        if (value.startsWith('http')) {
+          setPreview(value);
+        } else {
+          const data = await storageService.getImage(value);
+          if (data) {
+            setPreview(data);
+          }
+        }
+      }
+    }
+    loadImage();
+  }, [value]);
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
       try {
-        const imageId = await storageService.saveImage(file);
+        // Pass the current image ID if it exists and isn't a URL
+        const oldImageId = value && !value.startsWith('http') ? value : undefined;
+        const imageId = await storageService.saveImage(file, oldImageId);
         onChange(imageId);
+        
+        // Create a preview immediately after upload
+        const reader = new FileReader();
+        reader.onload = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
       } catch (error) {
         console.error('Failed to upload image:', error);
       }
     }
-  }, [onChange]);
+  }, [onChange, value]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -29,25 +56,18 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
     maxFiles: 1
   });
 
-  // If value is a URL, use it directly; otherwise, try to get it from storage
-  const imageUrl = value?.startsWith('http') 
-    ? value 
-    : value 
-      ? storageService.getImage(value) 
-      : null;
-
   return (
     <div
       {...getRootProps()}
-      className={`border-2 border-dashed rounded-lg aspect-square flex items-center justify-center cursor-pointer transition-colors ${
+      className={`border-2 border-dashed rounded-lg aspect-[3/4] flex items-center justify-center cursor-pointer transition-colors ${
         isDragActive ? 'border-[#2ecc71] bg-[#2ecc71]/10' : 'border-slate-600 hover:border-slate-500'
       }`}
     >
       <input {...getInputProps()} />
-      {imageUrl ? (
+      {preview ? (
         <div className="relative w-full h-full group">
           <img
-            src={imageUrl}
+            src={preview}
             alt="Movie poster"
             className="w-full h-full object-cover rounded-lg"
           />

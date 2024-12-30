@@ -1,6 +1,7 @@
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Card } from '@/components/ui/card';
 import { storageService } from '@/services/storage';
+import { useState, useEffect } from 'react';
 import type { Movie } from '@/types/movie';
 
 interface MovieCardProps {
@@ -10,10 +11,25 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ movie, onEdit }: MovieCardProps) {
-  // Get image URL from storage if it's an ID, otherwise use the URL directly
-  const imageUrl = movie.poster.startsWith('http') 
-    ? movie.poster 
-    : storageService.getImage(movie.poster);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadImage() {
+      if (movie.poster.startsWith('http')) {
+        setImageUrl(movie.poster);
+      } else {
+        const data = await storageService.getImage(movie.poster);
+        if (data) {
+          setImageUrl(data);
+        }
+      }
+    }
+    loadImage();
+  }, [movie.poster]);
+
+  if (!imageUrl) {
+    return null; // Or show a loading skeleton
+  }
 
   return (
     <HoverCard openDelay={200} closeDelay={0}>
@@ -25,7 +41,7 @@ export function MovieCard({ movie, onEdit }: MovieCardProps) {
           <div className="space-y-2">
             <div className="relative aspect-[3/4]">
               <img
-                src={imageUrl || movie.poster}
+                src={imageUrl}
                 alt={movie.title}
                 className="w-full h-full object-cover rounded-lg"
               />
@@ -45,7 +61,7 @@ export function MovieCard({ movie, onEdit }: MovieCardProps) {
         alignOffset={-50}
       >
         <img
-          src={imageUrl || movie.poster}
+          src={imageUrl}
           alt={movie.title}
           className="w-full h-40 object-cover"
         />

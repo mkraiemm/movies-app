@@ -10,6 +10,7 @@ const corsHeaders = {
   'Access-Control-Max-Age': '86400', // 24 hours
 };
 
+
 export async function corsMiddleware(
   request: NextRequest,
   handler: (req: NextRequest) => Promise<NextResponse>
