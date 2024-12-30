@@ -29,4 +29,5 @@ dist-ssr
 /backend/.next/
 backend/node_modules/
 backend/data/
+backend/data/*
 backend/package-lock.json
