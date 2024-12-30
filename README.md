@@ -2,6 +2,12 @@
 
 A modern web application for managing your personal movie collection. Built with React, TypeScript, and Next.js, featuring a beautiful UI with Tailwind CSS and secure authentication.
 
+## 🌐 Live Demo
+- Frontend: http://16.16.184.152
+- Backend API: http://16.16.184.152:4000
+- GitHub Repository: [github.com/mkraiemm/movies-app](https://github.com/mkraiemm/movies-app)
+
+
 ## ✨ Features
 - 🎬 Movie management (Create, Read, Update, Delete)
 - 🔐 Secure authentication
