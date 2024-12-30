@@ -18,6 +18,125 @@ A modern web application for managing your personal movie collection. Built with
 - 📄 Pagination
 - 🌍 API documentation
 
+
+## 🚀 Deployment
+
+### Infrastructure
+The application is deployed on AWS EC2 in the eu-north-1 (Stockholm) region:
+
+- **Instance Type**: t3.micro
+- **Region**: eu-north-1 (Stockholm)
+- **OS**: Ubuntu 22.04 LTS
+- **Architecture**: x86_64
+
+### Security Groups
+- HTTP (80)
+- HTTPS (443)
+- Custom TCP (4000) - Backend API
+- Custom TCP (80) - Frontend Dev Server
+- SSH (22) - Remote Access
+
+### Deployment Process
+
+1. **Server Setup**
+```bash
+# Update system packages
+sudo apt update && sudo apt upgrade -y
+
+# Install Node.js 20.x
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Install PM2 globally
+sudo npm install -g pm2
+
+# Install Git
+sudo apt install git -y
+```
+
+2. **Application Setup**
+```bash
+# Clone repository
+git clone https://github.com/mkraiemm/movies-app.git
+cd movies-app
+
+# Install dependencies
+npm install
+cd backend && npm install
+```
+
+3. **Environment Configuration**
+```bash
+# Frontend (.env)
+VITE_API_URL=http://16.16.184.152:4000/api
+
+# Backend (.env)
+PORT=4000
+JWT_SECRET=your-secret-key
+```
+
+4. **Build & Start**
+```bash
+# Build frontend
+npm run build
+
+# Start backend with PM2
+cd backend
+pm2 start npm --name "movies-backend" -- start
+
+# Start frontend with PM2
+cd ..
+pm2 start npm --name "movies-frontend" -- run preview
+```
+
+5. **PM2 Process Management**
+```bash
+# List running processes
+pm2 list
+
+# Monitor processes
+pm2 monit
+
+# View logs
+pm2 logs
+
+# Restart processes
+pm2 restart all
+
+# Setup PM2 startup script
+pm2 startup
+```
+
+### Maintenance
+
+1. **Updates**
+```bash
+# Pull latest changes
+git pull
+
+# Update dependencies
+npm install
+cd backend && npm install
+
+# Rebuild and restart
+npm run build
+pm2 restart all
+```
+
+2. **Monitoring**
+- Use PM2 monitoring: `pm2 monit`
+- Check logs: `pm2 logs`
+- Monitor system resources: `htop`
+
+3. **Backup**
+```bash
+# Backup data directory
+tar -czf backup-$(date +%Y%m%d).tar.gz backend/data/
+
+# Copy to secure location
+scp backup-*.tar.gz user@backup-server:/backups/
+```
+
 ## 🛠️ Getting Started
 
 ### Backend Setup
