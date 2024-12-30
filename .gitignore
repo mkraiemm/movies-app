@@ -28,4 +28,5 @@ dist-ssr
 # Ignore Next.js build files in backend
 /backend/.next/
 backend/node_modules/
+backend/data/
 backend/package-lock.json

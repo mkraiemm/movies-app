@@ -25,7 +25,7 @@ export function MovieForm({ movie, onSubmit, onDelete, onCancel }: MovieFormProp
     onSubmit({ 
       title, 
       publishingYear, 
-      poster: poster || DEFAULT_MOVIE_POSTER // Use default poster if none provided
+      poster: poster || DEFAULT_MOVIE_POSTER
     });
   };
 
@@ -36,15 +36,20 @@ export function MovieForm({ movie, onSubmit, onDelete, onCancel }: MovieFormProp
       </h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-2 gap-6">
-          <ImageUpload value={poster} onChange={setPoster} />
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
+          {/* Desktop: Image on left, Mobile: Image after inputs */}
+          <div className="lg:order-1 order-2">
+            <ImageUpload value={poster} onChange={setPoster} />
+          </div>
           
-          <div className="space-y-6">
+          {/* Desktop: Inputs and buttons on right, Mobile: Inputs first */}
+          <div className="space-y-6 lg:order-2 order-1">
             <CustomInput
               placeholder="Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              className="w-full bg-[#15374c] border-0"
             />
             <CustomInput
               type="number"
@@ -52,12 +57,23 @@ export function MovieForm({ movie, onSubmit, onDelete, onCancel }: MovieFormProp
               value={publishingYear}
               onChange={(e) => setPublishingYear(Number(e.target.value))}
               required
+              className="w-full bg-[#15374c] border-0"
             />
-            <div className="flex gap-4 pt-4">
-              <CustomButton type="button" variant="secondary" onClick={onCancel}>
+            
+            {/* Desktop: Horizontal button layout */}
+            <div className="hidden lg:flex gap-4 pt-4">
+              <CustomButton 
+                type="button" 
+                variant="secondary" 
+                onClick={onCancel}
+                className="bg-[#15374c] hover:bg-[#15374c]/90"
+              >
                 Cancel
               </CustomButton>
-              <CustomButton type="submit">
+              <CustomButton 
+                type="submit"
+                className="bg-[#2ecc71] hover:bg-[#2ecc71]/90"
+              >
                 {movie ? 'Update' : 'Submit'}
               </CustomButton>
               {onDelete && (
@@ -72,6 +88,37 @@ export function MovieForm({ movie, onSubmit, onDelete, onCancel }: MovieFormProp
               )}
             </div>
           </div>
+        </div>
+
+        {/* Mobile: Vertical button layout */}
+        <div className="flex flex-col gap-3 lg:hidden">
+          <div className="grid grid-cols-2 gap-3">
+            <CustomButton 
+              type="button" 
+              variant="secondary" 
+              onClick={onCancel}
+              className="h-12 bg-[#15374c] hover:bg-[#15374c]/90"
+            >
+              Cancel
+            </CustomButton>
+            <CustomButton 
+              type="submit"
+              className="h-12 bg-[#2ecc71] hover:bg-[#2ecc71]/90"
+            >
+              {movie ? 'Update' : 'Submit'}
+            </CustomButton>
+          </div>
+          
+          {onDelete && (
+            <CustomButton 
+              type="button" 
+              variant="destructive"
+              className="h-12 bg-red-500 hover:bg-red-600 w-full"
+              onClick={onDelete}
+            >
+              Delete
+            </CustomButton>
+          )}
         </div>
       </form>
     </div>
