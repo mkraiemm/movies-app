@@ -1,21 +1,18 @@
 # Movies App
-### Created by mkraiem
 
 A modern web application for managing your personal movie collection. Built with React, TypeScript, and Next.js, featuring a beautiful UI with Tailwind CSS and secure authentication.
 
-## 🌐 Live Demo
-- Frontend: http://16.16.184.152
-- Backend API: http://16.16.184.152:4000
-- GitHub Repository: [github.com/mkraiemm/movies-app](https://github.com/mkraiemm/movies-app)
-
-## Features
+## ✨ Features
 - 🎬 Movie management (Create, Read, Update, Delete)
 - 🔐 Secure authentication
 - 🖼️ Image upload for movie posters
 - 📱 Responsive design
 - 🎨 Modern UI with dark theme
+- 📝 Form validation
+- 📄 Pagination
+- 🌍 API documentation
 
-## Getting Started
+## 🛠️ Getting Started
 
 ### Backend Setup
 ```bash
@@ -29,13 +26,10 @@ npm install
 npm run start
 ```
 
-The backend server will start on `http://16.16.184.152:3000`
+The backend server will start on `http://localhost:3000`
 
 ### Frontend Setup
 ```bash
-# Navigate to frontend directory
-cd frontend
-
 # Install dependencies
 npm install
 
@@ -43,29 +37,23 @@ npm install
 npm run dev
 ```
 
-The frontend development server will start on `http://16.16.184.152:4000`
+The frontend development server will start on `http://localhost:5173`
 
-## API Documentation
+## 📚 API Documentation
 
 ### Base URL
 ```
-http://16.16.184.152:3000/api
-
-
-## Authentication
-The API uses JWT (JSON Web Token) for authentication. Include the token in the Authorization header:
-```
-Authorization: Bearer <your_token>
+http://localhost:3000/api
 ```
 
-### Authentication Endpoints
+### Authentication
 
 #### Login
 ```http
 POST /auth/login
 ```
 
-Request body:
+**Request Body:**
 ```json
 {
   "email": "string",
@@ -73,7 +61,7 @@ Request body:
 }
 ```
 
-Response:
+**Response:**
 ```json
 {
   "user": {
@@ -84,16 +72,18 @@ Response:
 }
 ```
 
-## Movies Endpoints
+### Movies
 
-### Get All Movies
-Retrieves all movies for the authenticated user.
-
+#### Get All Movies
 ```http
 GET /movies
 ```
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
-Response:
+**Response:**
 ```json
 [
   {
@@ -105,14 +95,16 @@ Response:
 ]
 ```
 
-### Get Movie by ID
-Retrieves a specific movie by ID.
-
+#### Get Movie by ID
 ```http
 GET /movies/:id
 ```
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
-Response:
+**Response:**
 ```json
 {
   "id": "string",
@@ -122,14 +114,16 @@ Response:
 }
 ```
 
-### Create Movie
-Creates a new movie.
-
+#### Create Movie
 ```http
 POST /movies
 ```
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
-Request body:
+**Request Body:**
 ```json
 {
   "title": "string",
@@ -138,24 +132,16 @@ Request body:
 }
 ```
 
-Response:
-```json
-{
-  "id": "string",
-  "title": "string",
-  "publishingYear": "number",
-  "poster": "string"
-}
-```
-
-### Update Movie
-Updates an existing movie.
-
+#### Update Movie
 ```http
 PUT /movies/:id
 ```
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
-Request body:
+**Request Body:**
 ```json
 {
   "title": "string",
@@ -164,75 +150,125 @@ Request body:
 }
 ```
 
-Response:
-```json
-{
-  "id": "string",
-  "title": "string",
-  "publishingYear": "number",
-  "poster": "string"
-}
-```
-
-### Delete Movie
-Deletes a movie.
-
+#### Delete Movie
 ```http
 DELETE /movies/:id
 ```
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
-Response: `204 No Content`
+### Image Storage
 
-## Error Responses
+#### Upload Image
+```http
+POST /storage/images
+```
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
-The API returns standard HTTP status codes:
-
-- `200`: Success
-- `201`: Created
-- `204`: No Content
-- `400`: Bad Request
-- `401`: Unauthorized
-- `403`: Forbidden
-- `404`: Not Found
-- `500`: Internal Server Error
-
-Error response body:
+**Request Body:**
 ```json
 {
-  "error": "string"
+  "data": "string (base64)",
+  "oldImageId": "string (optional)"
 }
 ```
 
-## Rate Limiting
-
-- Rate limit: 100 requests per minute
-- Rate limit header: `X-RateLimit-Limit`
-- Remaining requests header: `X-RateLimit-Remaining`
-- Reset time header: `X-RateLimit-Reset`
-
-## Data Types
-
-### Movie Object
-```typescript
+**Response:**
+```json
 {
-  id: string;          // Unique identifier
-  title: string;       // Movie title
-  publishingYear: number; // Year the movie was published
-  poster: string;      // URL or base64 string of the movie poster
+  "id": "string"
 }
 ```
 
-### User Object
-```typescript
+#### Get Image
+```http
+GET /storage/images/:id
+```
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response:**
+```json
 {
-  id: string;          // Unique identifier
-  email: string;       // User's email address
+  "data": "string (base64)"
 }
 ```
 
-## Security
+### Error Responses
+All endpoints may return the following errors:
 
-- All endpoints except `/auth/login` require authentication
-- HTTPS is required for all API calls
-- Tokens expire after 7 days
-- CORS is enabled for `http://16.16.184.152`
+```json
+{
+  "error": "string",
+  "status": "number"
+}
+```
+
+Common status codes:
+- 400: Bad Request
+- 401: Unauthorized
+- 404: Not Found
+- 500: Internal Server Error
+
+## 🔒 Security Features
+- JWT-based authentication
+- Password hashing
+- Protected API endpoints
+- CORS configuration
+- Input validation
+- Image compression
+- Secure file handling
+
+## 💻 Tech Stack
+- **Frontend**: 
+  - React 18
+  - TypeScript
+  - Vite
+  - TailwindCSS
+  - Lucide Icons
+  - React Router
+  - React Hook Form
+  - React Dropzone
+- **Backend**: 
+  - Node.js
+  - Next.js
+  - TypeScript
+  - File-based storage
+- **Development**:
+  - ESLint
+  - Prettier
+  - TypeScript
+  - Git
+
+## 📦 Project Structure
+```
+.
+├── backend/
+│   ├── data/           # Storage files
+│   ├── src/
+│   │   ├── app/       # API routes
+│   │   └── lib/       # Utilities
+│   └── package.json
+├── src/
+│   ├── components/    # UI components
+│   ├── hooks/        # Custom hooks
+│   ├── lib/          # Utilities
+│   ├── pages/        # Page components
+│   ├── providers/    # Context providers
+│   ├── services/     # API services
+│   └── types/        # TypeScript types
+└── package.json
+```
+
+## 🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
